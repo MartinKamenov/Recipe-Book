@@ -1,0 +1,5 @@
+export const GET_RECIPES = Symbol('GET_RECIPES');
+export const GET_RECIPES_SUCCESS = Symbol('GET_RECIPES_SUCCESS');
+export const GET_RECIPES_FAILURE = Symbol('GET_RECIPES_FAILURE');
+
+export const CHANGE_SEARCH_PARAMS = Symbol('CHANGE_SEARCH_PARAMS');
