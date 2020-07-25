@@ -1,10 +1,15 @@
 import React from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Provider} from 'react-redux';
+import MainRouter from './routing';
+import {store} from './redux/index';
 
 const App = () => {
   return (
-    <div className="App">
-    </div>
+    <Provider store={store}>
+      <MainRouter/>
+    </Provider>
   );
 };
 
