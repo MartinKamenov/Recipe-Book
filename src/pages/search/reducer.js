@@ -16,16 +16,13 @@ export default (state=defaultState, action) => {
       const page = state.getIn(['paging', 'page']);
       const currentRecipes = state.get('recipes');
 
-      if (recipes.length === 0) {
-        return state.set('loading', false)
-            .set('initialyFetched', true)
-            .setIn(['paging', 'lastPage'], true);
-      }
+      const lastPage = recipes.length < 10;
 
       return state.set('loading', false)
           .set('initialyFetched', true)
           .set('recipes', [...currentRecipes, ...recipes])
-          .setIn(['paging', 'page'], page + 1);
+          .setIn(['paging', 'page'], page + 1)
+          .setIn(['paging', 'lastPage'], lastPage);
     case actionTypes.GET_RECIPES_FAILURE:
       // const error = action.error;
       return state

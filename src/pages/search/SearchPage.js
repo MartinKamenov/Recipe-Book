@@ -80,7 +80,12 @@ const SearchPage = ({history, location}) => {
                 <Loader message='Fetching recipes'/>
             ) : (
                 <>
-                  <RecipeList recipes={recipes}/>
+                  {recipes.length ?
+                    <RecipeList recipes={recipes}/> :
+                    <div className='message-container'>
+                      No recipes were found
+                    </div>
+                  }
                   {lastPage || (
                     <Loader message='Fetching more recipes'/>
                   )}
