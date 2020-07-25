@@ -6,7 +6,13 @@ const Search = ({inputParams, onSearch, updateValue}) => {
   return (
     <div className='search-container'>
       {inputParams.map((params, i) => (
-        <input key={i} placeholder={params.placeholder} value={params.value} onChange={({target: {value}}) => updateValue(params.key, value)}/>
+        <input key={i}
+          placeholder={params.placeholder}
+          value={params.value}
+          onChange={
+            ({target: {value}}) => updateValue(params.key, value)
+          }
+        />
       ))}
 
       <div onClick={onSearch} className='btn btn-primary'>Search</div>
@@ -17,6 +23,7 @@ const Search = ({inputParams, onSearch, updateValue}) => {
 Search.propTypes = {
   inputParams: PropTypes.array.isRequired,
   onSearch: PropTypes.func.isRequired,
+  updateValue: PropTypes.func.isRequired,
 };
 
 export default Search;

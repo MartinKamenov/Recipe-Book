@@ -1,11 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import Loader from '../../components/common/loader';
 import RecipeList from '../../components/recipe/list';
 import {getRecipes, updateSearchValue} from './actions';
 import './SearchPage.scss';
 import Search from '../../components/search';
-import {getQueryParamsString, getQueryParamsObject} from '../../helpers/queryHelper';
+import {
+  getQueryParamsString,
+  getQueryParamsObject,
+} from '../../helpers/queryHelper';
+import PropTypes from 'prop-types';
 
 const SearchPage = ({history, location}) => {
   const OFFSET = 150;
@@ -16,17 +20,22 @@ const SearchPage = ({history, location}) => {
   const lastPage = paging.lastPage;
 
   const [fetchNextPage, setShouldFetchNextPage] = useState(false);
-  const updateValue = (key, value) => dispatch(updateSearchValue(key, value));
 
   const dispatch = useDispatch();
+
+  const updateValue = useCallback(
+      (key, value) => dispatch(updateSearchValue(key, value)),
+      [dispatch],
+  );
 
   useEffect(() => {
     if (!initialyFetched) {
       const initialSearch = getQueryParamsObject(location.search);
-      Object.keys(initialSearch).forEach((key) => updateValue(key, initialSearch[key]));
+      Object.keys(initialSearch)
+          .forEach((key) => updateValue(key, initialSearch[key]));
       dispatch(getRecipes(page, initialSearch));
     }
-  }, [initialyFetched, dispatch, page, location]);
+  }, [initialyFetched, dispatch, page, location, updateValue]);
 
   useEffect(() => {
     if (!loading && fetchNextPage && !lastPage) {
@@ -37,7 +46,8 @@ const SearchPage = ({history, location}) => {
 
 
   const handleScroll = ({target}) => {
-    const offsetFromTop = target.scrollHeight - (target.scrollTop + target.offsetHeight);
+    const offsetFromTop =
+      target.scrollHeight - (target.scrollTop + target.offsetHeight);
     if (offsetFromTop < OFFSET) {
       setShouldFetchNextPage(true);
     }
@@ -63,7 +73,9 @@ const SearchPage = ({history, location}) => {
 
   return (
     <div className='search-page' onScroll={handleScroll}>
-      <Search onSearch={handleSearch} updateValue={updateValue} inputParams={inputParams}/>
+      <Search onSearch={handleSearch}
+        updateValue={updateValue}
+        inputParams={inputParams}/>
       {!initialyFetched ? (
                 <Loader message='Fetching recipes'/>
             ) : (
@@ -76,6 +88,15 @@ const SearchPage = ({history, location}) => {
             )}
     </div>
   );
+};
+
+SearchPage.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default SearchPage;

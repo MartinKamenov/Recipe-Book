@@ -4,12 +4,18 @@ export const getQueryParamsString = (queryParamsObject) => {
     return '';
   }
 
-  return '?' + queryParamsKeys.filter((key) => queryParamsObject[key]).map((key) => `${key}=${queryParamsObject[key]}`).join('&');
+  return '?' + queryParamsKeys
+      .filter((key) => queryParamsObject[key])
+      .map((key) => `${key}=${queryParamsObject[key]}`)
+      .join('&');
 };
 
 export const getQueryParamsObject = (queryParamsString) => {
-  return queryParamsString.substring(1, queryParamsString.length).split('&').reduce((acc, curr) => {
-    const pair = curr.split('=');
-    return {...acc, [pair[0]]: pair[1]};
-  }, {});
+  return queryParamsString
+      .substring(1, queryParamsString.length)
+      .split('&')
+      .reduce((acc, curr) => {
+        const pair = curr.split('=');
+        return {...acc, [pair[0]]: pair[1]};
+      }, {});
 };

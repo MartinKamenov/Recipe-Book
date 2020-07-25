@@ -8,17 +8,29 @@ const requestMiddleware = (store) => (next) => (action) => {
     next(action);
 
     const defaultHeaders = {
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
       'Access-Control-Allow-Origin': '*/*',
-      'Access-Control-Allow-Headers': 'x-access-token, Origin, X-Requested-With, Content-Type, Accept',
       'origin': 'recipe-book-app-mk-2',
     };
 
-    const {url, method, payload, onSuccess, onFailure, headers = {}, queryParams} = action.request;
+    const {
+      url,
+      method,
+      payload,
+      onSuccess,
+      onFailure,
+      headers = {},
+      queryParams,
+    } = action.request;
+
     const fullHeaders = {...defaultHeaders, ...headers};
 
 
-    const fullUrl = (useProxy ? PROXY_URL : '') + BASE_URL + url + getQueryParamsString(queryParams);
+    const fullUrl =
+      (useProxy ? PROXY_URL : '') +
+      BASE_URL +
+      url +
+      getQueryParamsString(queryParams);
+
     console.log('fullUrl', fullUrl);
 
     const dataOrParams = method.includes(['GET', 'DELETE']) ? 'params' : 'data';
