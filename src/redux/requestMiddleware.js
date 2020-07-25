@@ -2,6 +2,7 @@ import axios from 'axios';
 import {BASE_URL, PROXY_URL, useProxy} from '../config/dev';
 
 import {getQueryParamsString} from '../helpers/queryHelper';
+import {error} from 'react-toastify-redux';
 
 const requestMiddleware = (store) => (next) => (action) => {
   if (action.request && !action.request.customHandle) {
@@ -48,12 +49,13 @@ const requestMiddleware = (store) => (next) => (action) => {
           result: data,
         });
       }
-    }).catch((error) => {
-      console.log('Failure', error.message);
+    }).catch((er) => {
+      console.log('Failure', er.message);
+      store.dispatch(error(er.message));
       if (onFailure) {
         store.dispatch({
           type: onFailure,
-          error,
+          error: er,
         });
       }
     });
